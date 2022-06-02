@@ -1,0 +1,16 @@
+name: 'Skopeo Action'
+description: 'Get multi sources docker images and push to dest'
+author: 'Itzik'
+inputs:
+  src:
+    required: true
+    description: 'Source tag'
+  dst:
+    required: true
+    description: 'Destination tags'
+  docker-config-path:
+    required: false
+    description: 'Docker config file path'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
