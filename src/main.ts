@@ -26,6 +26,7 @@ async function run(): Promise<void> {
       '--rm',
       '-i',
       '-v',
+      '--privileged',
       `${dockerConfigPath}:/root/.docker/config.json`,
       '--network',
       'host',
