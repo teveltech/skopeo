@@ -8,7 +8,7 @@ async function run(): Promise<void> {
     const dockerConfigPath: string =
       core.getInput('docker-config-path') || '/home/runner/.docker/config.json'
 
-    const destination: string = core.getInput('dst')  
+    const destination: string = core.getInput('dst')
 
     if (destination === '') {
       core.setFailed('Destaination image not set')
@@ -20,22 +20,38 @@ async function run(): Promise<void> {
       return
     }
 
-
-    await exec.exec('docker', [
-      'run',
-      '--rm',
-      '-i',
-      '-v',
-      '--privileged',
-      `${dockerConfigPath}:/root/.docker/config.json`,
-      '--network',
-      'host',
-      'quay.io/skopeo/stable:latest',
-      'copy',
-      '--src-tls-verify=false',
-      ...source,
-      destination
-    ])
+    await Promise.all(source.map(s => {
+      exec.exec('docker', [
+        'run',
+        '--rm',
+        '-i',
+        '--privileged',
+        '-v',
+        `${dockerConfigPath}:/root/.docker/config.json`,
+        '--network',
+        'host',
+        'quay.io/skopeo/stable:latest',
+        'copy',
+        '--src-tls-verify=false',
+        s,
+        destination
+      ])
+    }))
+    // await exec.exec('docker', [
+    //   'run',
+    //   '--rm',
+    //   '-i',
+    //   '--privileged',
+    //   '-v',
+    //   `${dockerConfigPath}:/root/.docker/config.json`,
+    //   '--network',
+    //   'host',
+    //   'quay.io/skopeo/stable:latest',
+    //   'copy',
+    //   '--src-tls-verify=false',
+    //   ...source,
+    //   destination
+    // ])
   } catch (error: any) {
     core.setFailed(error.message)
   }

@@ -60,21 +60,38 @@ function run() {
                 core.setFailed('Source image not set');
                 return;
             }
-            yield exec.exec('docker', [
-                'run',
-                '--rm',
-                '-i',
-                '-v',
-                '--privileged',
-                `${dockerConfigPath}:/root/.docker/config.json`,
-                '--network',
-                'host',
-                'quay.io/skopeo/stable:latest',
-                'copy',
-                '--src-tls-verify=false',
-                ...source,
-                destination
-            ]);
+            yield Promise.all(source.map(s => {
+                exec.exec('docker', [
+                    'run',
+                    '--rm',
+                    '-i',
+                    '--privileged',
+                    '-v',
+                    `${dockerConfigPath}:/root/.docker/config.json`,
+                    '--network',
+                    'host',
+                    'quay.io/skopeo/stable:latest',
+                    'copy',
+                    '--src-tls-verify=false',
+                    s,
+                    destination
+                ]);
+            }));
+            // await exec.exec('docker', [
+            //   'run',
+            //   '--rm',
+            //   '-i',
+            //   '--privileged',
+            //   '-v',
+            //   `${dockerConfigPath}:/root/.docker/config.json`,
+            //   '--network',
+            //   'host',
+            //   'quay.io/skopeo/stable:latest',
+            //   'copy',
+            //   '--src-tls-verify=false',
+            //   ...source,
+            //   destination
+            // ])
         }
         catch (error) {
             core.setFailed(error.message);
