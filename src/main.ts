@@ -24,12 +24,12 @@ async function run(): Promise<void> {
     await exec.exec('docker', [
       'run',
       '--rm',
-      '-i',
+      '-it',
       '-v',
       `${dockerConfigPath}:/root/.docker/config.json`,
       '--network',
       'host',
-      'akhilerm/repo-copy:latest',
+      'quay.io/skopeo/stable:latest',
       ...source,
       destination
     ])
