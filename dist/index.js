@@ -48,6 +48,7 @@ const core = __importStar(__nccwpck_require__(186));
 const exec = __importStar(__nccwpck_require__(514));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
+        let currImage = "";
         try {
             const source = yield getDestinationTags();
             const dockerConfigPath = core.getInput('docker-config-path') || '/home/runner/.docker/config.json';
@@ -60,10 +61,12 @@ function run() {
                 core.setFailed('Source image not set');
                 return;
             }
-            const res = yield Promise.all(source.map(s => {
+            // const res = await Promise.all(source.map(s => {
+            for (const s in source) {
+                currImage = s;
                 const imageName = s.split("/").pop();
                 const dest = destination.split("/").slice(0, -1).join("/") + "/" + imageName;
-                exec.exec('docker', [
+                const res = yield exec.exec('docker', [
                     'run',
                     '--rm',
                     '-i',
@@ -78,8 +81,8 @@ function run() {
                     s,
                     dest
                 ]);
-                console.log("destenation image", imageName);
-            }));
+                console.log("destination image", imageName, "copied");
+            }
             // await exec.exec('docker', [
             //   'run',
             //   '--rm',
@@ -97,7 +100,7 @@ function run() {
             // ])
         }
         catch (error) {
-            core.setFailed(error.message);
+            core.setFailed("failed to copy " + currImage + error.message);
         }
     });
 }

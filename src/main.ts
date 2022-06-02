@@ -3,6 +3,8 @@ import * as core from '@actions/core'
 import * as exec from '@actions/exec'
 
 async function run(): Promise<void> {
+  let currImage: string = "";
+
   try {
     const source:string[] = await getDestinationTags()
     const dockerConfigPath: string =
@@ -20,10 +22,12 @@ async function run(): Promise<void> {
       return
     }
 
-    const res = await Promise.all(source.map(s => {
+    // const res = await Promise.all(source.map(s => {
+    for (const s in source){
+      currImage = s;
       const imageName = s.split("/").pop();
       const dest = destination.split("/").slice(0,-1).join("/") + "/" + imageName;
-      exec.exec('docker', [
+      const res = await exec.exec('docker', [
         'run',
         '--rm',
         '-i',
@@ -38,8 +42,8 @@ async function run(): Promise<void> {
         s,
         dest
       ])
-      console.log("destenation image", imageName)
-    }))
+      console.log("destination image", imageName, "copied")
+    }
     // await exec.exec('docker', [
     //   'run',
     //   '--rm',
@@ -56,7 +60,7 @@ async function run(): Promise<void> {
     //   destination
     // ])
   } catch (error: any) {
-    core.setFailed(error.message)
+    core.setFailed("failed to copy " + currImage + error.message)
   }
 }
 
