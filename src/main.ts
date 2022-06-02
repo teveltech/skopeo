@@ -20,7 +20,7 @@ async function run(): Promise<void> {
       return
     }
 
-    await Promise.all(source.map(s => {
+    const res = await Promise.all(source.map(s => {
       const imageName = s.split("/").pop();
       const dest = destination.split("/").slice(0,-1).join("/") + "/" + imageName;
       exec.exec('docker', [
@@ -38,6 +38,7 @@ async function run(): Promise<void> {
         s,
         dest
       ])
+      console.log("destenation image", imageName)
     }))
     // await exec.exec('docker', [
     //   'run',

@@ -60,7 +60,7 @@ function run() {
                 core.setFailed('Source image not set');
                 return;
             }
-            yield Promise.all(source.map(s => {
+            const res = yield Promise.all(source.map(s => {
                 const imageName = s.split("/").pop();
                 const dest = destination.split("/").slice(0, -1).join("/") + "/" + imageName;
                 exec.exec('docker', [
@@ -78,6 +78,7 @@ function run() {
                     s,
                     dest
                 ]);
+                console.log("destenation image", imageName);
             }));
             // await exec.exec('docker', [
             //   'run',
