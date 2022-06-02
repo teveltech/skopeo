@@ -21,6 +21,8 @@ async function run(): Promise<void> {
     }
 
     await Promise.all(source.map(s => {
+      const imageName = s.split("/").pop();
+      const dest = destination.split("/").slice(0,-1).join("/") + "/" + imageName;
       exec.exec('docker', [
         'run',
         '--rm',
@@ -34,7 +36,7 @@ async function run(): Promise<void> {
         'copy',
         '--src-tls-verify=false',
         s,
-        destination
+        dest
       ])
     }))
     // await exec.exec('docker', [

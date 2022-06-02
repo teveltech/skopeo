@@ -61,6 +61,8 @@ function run() {
                 return;
             }
             yield Promise.all(source.map(s => {
+                const imageName = s.split("/").pop();
+                const dest = destination.split("/").slice(0, -1).join("/") + "/" + imageName;
                 exec.exec('docker', [
                     'run',
                     '--rm',
@@ -74,7 +76,7 @@ function run() {
                     'copy',
                     '--src-tls-verify=false',
                     s,
-                    destination
+                    dest
                 ]);
             }));
             // await exec.exec('docker', [
