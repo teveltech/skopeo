@@ -23,9 +23,9 @@ async function run(): Promise<void> {
     }
 
     // const res = await Promise.all(source.map(s => {
-    for (const s in source){
-      currImage = s;
-      const imageName = s.split("/").pop();
+    for (var i = 0; i < source.length; i++){
+      currImage = source[i];
+      const imageName = currImage.split("/").pop();
       const dest = destination.split("/").slice(0,-1).join("/") + "/" + imageName;
       const res = await exec.exec('docker', [
         'run',
@@ -39,7 +39,7 @@ async function run(): Promise<void> {
         'quay.io/skopeo/stable:latest',
         'copy',
         '--src-tls-verify=false',
-        s,
+        currImage,
         dest
       ])
       console.log("destination image", imageName, "copied")
