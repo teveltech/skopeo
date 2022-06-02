@@ -65,10 +65,13 @@ function run() {
                 '--rm',
                 '-i',
                 '-v',
+                '--privileged',
                 `${dockerConfigPath}:/root/.docker/config.json`,
                 '--network',
                 'host',
                 'quay.io/skopeo/stable:latest',
+                'copy',
+                '--src-tls-verify=false',
                 ...source,
                 destination
             ]);

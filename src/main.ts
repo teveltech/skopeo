@@ -31,6 +31,8 @@ async function run(): Promise<void> {
       '--network',
       'host',
       'quay.io/skopeo/stable:latest',
+      'copy',
+      '--src-tls-verify=false',
       ...source,
       destination
     ])
