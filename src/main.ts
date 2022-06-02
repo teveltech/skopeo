@@ -24,7 +24,7 @@ async function run(): Promise<void> {
     await exec.exec('docker', [
       'run',
       '--rm',
-      '-it',
+      '-i',
       '-v',
       `${dockerConfigPath}:/root/.docker/config.json`,
       '--network',

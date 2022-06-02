@@ -63,7 +63,7 @@ function run() {
             yield exec.exec('docker', [
                 'run',
                 '--rm',
-                '-it',
+                '-i',
                 '-v',
                 `${dockerConfigPath}:/root/.docker/config.json`,
                 '--network',
