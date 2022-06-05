@@ -39,6 +39,7 @@ async function run(): Promise<void> {
         'quay.io/skopeo/stable:latest',
         'copy',
         '--all',
+        '-q',
         '--src-tls-verify=false',
         currImage,
         dest
