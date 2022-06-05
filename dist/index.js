@@ -77,6 +77,7 @@ function run() {
                     'host',
                     'quay.io/skopeo/stable:latest',
                     'copy',
+                    '--all',
                     '--src-tls-verify=false',
                     currImage,
                     dest
