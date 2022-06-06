@@ -64,7 +64,7 @@ function run() {
             // const res = await Promise.all(source.map(s => {
             for (var i = 0; i < source.length; i++) {
                 currImage = source[i];
-                const imageName = currImage.split("/").slice(-2);
+                const imageName = currImage.split("/").slice(-2).join("/");
                 const dest = destination.split("/").slice(0, -1).join("/") + "/" + imageName;
                 const res = yield exec.exec('docker', [
                     'run',
