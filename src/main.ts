@@ -25,7 +25,7 @@ async function run(): Promise<void> {
     // const res = await Promise.all(source.map(s => {
     for (var i = 0; i < source.length; i++){
       currImage = source[i];
-      const imageName = currImage.split("/").pop();
+      const imageName = currImage.split("/").slice(-2);
       const dest = destination.split("/").slice(0,-1).join("/") + "/" + imageName;
       const res = await exec.exec('docker', [
         'run',
